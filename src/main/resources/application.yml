@@ -1,0 +1,36 @@
+server:
+  port: 8083
+  tomcat:
+    connection-timeout: 6000
+
+#keycloak:
+#  realm: ${KEYCLOAK_REALM:game}
+#  auth-server-url: http://${KEYCLOAK_URL:localhost}:${KEYCLOAK_PORT:8080}/auth
+#  ssl-required: external
+#  ## Client ID
+#  resource: ${KEYCLOAK_ID:game-ms}
+#  bearer-only: true
+
+# OAuth2
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: ${KEYCLOAK_REALM:game-ms}
+            client-secret: --generated--
+            authorization-grant-type: password
+            scope:
+              - openid
+              - email
+              - password
+        provider:
+          keycloak:
+            issuer-uri: http://${KEYCLOAK_URL:localhost}:${KEYCLOAK_PORT:8080}/realms/${KEYCLOAK_REALM:game}
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://${KEYCLOAK_URL:localhost}:${KEYCLOAK_PORT:8080}/realms/${KEYCLOAK_REALM:game}
+
+
